@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import CourseCard from '../components/CourseCard';
 import Mascot from '../components/Mascot';
 import { COURSES, TESTIMONIALS } from '../constants';
-import { ShieldCheck, HeartPulse, Users, Star, ArrowRight, CheckCircle2, Award, Zap, Building2, GraduationCap, Calendar, FileCheck, Award as CertificateIcon } from 'lucide-react';
+import { ShieldCheck, HeartPulse, Users, Star, ArrowRight, CheckCircle2, Award, Zap, Building2, GraduationCap, Calendar, FileCheck } from 'lucide-react';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -19,10 +19,6 @@ const Home: React.FC = () => {
     { name: 'ACECQA Approved', icon: CheckCircle2 },
     { name: 'Skills IQ', icon: Zap },
   ];
-
-  // Duplicating for smooth infinite scroll
-  const marqueePartners = [...partners, ...partners, ...partners, ...partners];
-  const marqueeTestimonials = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
     <main className="overflow-x-hidden">
@@ -81,22 +77,56 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. Partners Marquee - Killer Level Glassy Carousel (Endless Loop) */}
-      <section className="py-12 bg-white relative overflow-hidden">
+      {/* 2. Partners Marquee - Updated for True Infinite Loop & Pause on Hover */}
+      <section className="py-12 bg-white relative overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white z-10 pointer-events-none" />
-        <div className="flex w-full overflow-hidden mask-gradient">
-            <div className="flex animate-marquee gap-8 whitespace-nowrap py-4">
-                {marqueePartners.map((partner, i) => (
-                    <div key={i} className="inline-flex items-center gap-3 bg-white border border-slate-100 shadow-soft px-8 py-4 rounded-2xl mx-2 min-w-[250px] justify-center hover:border-brand-teal/30 hover:shadow-glow transition-all duration-300 group cursor-default">
-                        <partner.icon className="text-brand-navy/40 group-hover:text-brand-teal transition-colors" />
-                        <span className="text-lg font-bold text-brand-navy/60 group-hover:text-brand-navy uppercase tracking-widest">{partner.name}</span>
+        <div className="flex overflow-hidden mask-gradient select-none">
+            {/* Set 1 */}
+            <div className="flex shrink-0 animate-marquee items-center justify-around gap-12 min-w-full py-4 group-hover:[animation-play-state:paused]">
+                {partners.map((partner, i) => (
+                    <div key={i} className="inline-flex items-center gap-3 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default px-4">
+                        <partner.icon className="w-8 h-8 text-brand-teal" />
+                        <span className="text-lg font-bold text-brand-navy uppercase tracking-widest">{partner.name}</span>
+                    </div>
+                ))}
+            </div>
+            {/* Set 2 (Duplicate for seamless loop) */}
+            <div className="flex shrink-0 animate-marquee items-center justify-around gap-12 min-w-full py-4 group-hover:[animation-play-state:paused]" aria-hidden="true">
+                {partners.map((partner, i) => (
+                    <div key={`dup-${i}`} className="inline-flex items-center gap-3 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default px-4">
+                        <partner.icon className="w-8 h-8 text-brand-teal" />
+                        <span className="text-lg font-bold text-brand-navy uppercase tracking-widest">{partner.name}</span>
                     </div>
                 ))}
             </div>
         </div>
       </section>
 
-      {/* 3. Category Split - Geometric Design (Matching Screenshot) */}
+      {/* NEW: Stats Section (Dark Navy from screenshot) */}
+      <section className="bg-brand-navy py-16 px-4 border-y border-white/5 relative z-20">
+         <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10 gap-8 md:gap-0">
+               <div className="text-center px-4 py-4 md:py-0">
+                  <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-2">15+</div>
+                  <div className="text-slate-300 font-medium">Years Experience</div>
+               </div>
+               <div className="text-center px-4 py-4 md:py-0">
+                  <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-2">10k+</div>
+                  <div className="text-slate-300 font-medium">Students Trained</div>
+               </div>
+               <div className="text-center px-4 py-4 md:py-0">
+                  <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-2">100%</div>
+                  <div className="text-slate-300 font-medium">Compliance</div>
+               </div>
+               <div className="text-center px-4 py-4 md:py-0">
+                  <div className="text-4xl md:text-5xl font-bold text-brand-teal mb-2">4.9</div>
+                  <div className="text-slate-300 font-medium">Average Rating</div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* 3. Category Split */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto space-y-16">
           <div className="text-center space-y-4">
@@ -107,12 +137,11 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* First Aid & CPR - Teal Theme with Diamond Graphic */}
+            {/* First Aid & CPR */}
             <div 
               onClick={() => navigate('/courses?category=firstaid')}
               className="group relative h-[400px] rounded-[2.5rem] overflow-hidden cursor-pointer bg-brand-tealLight/50 hover:bg-brand-tealLight transition-colors duration-500 border border-brand-teal/5"
             >
-              {/* Geometric Decoration - Diamond */}
               <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-brand-teal/10 rounded-[3rem] transform rotate-45 transition-transform duration-700 group-hover:scale-110 group-hover:rotate-12" />
               <div className="absolute top-1/2 right-0 w-40 h-40 bg-brand-teal/5 rounded-full blur-3xl" />
 
@@ -129,12 +158,11 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* NDIS & Community Care - Blue/Navy Theme with Circle Graphic */}
+            {/* NDIS & Community Care */}
             <div 
               onClick={() => navigate('/courses?category=ndis')}
               className="group relative h-[400px] rounded-[2.5rem] overflow-hidden cursor-pointer bg-blue-50/50 hover:bg-blue-50 transition-colors duration-500 border border-blue-100/50"
             >
-              {/* Geometric Decoration - Circle */}
               <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-100/60 rounded-full transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute top-20 right-20 w-20 h-20 bg-blue-200/20 rounded-full blur-2xl" />
 
@@ -154,7 +182,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Process Section - Updated to match screenshot */}
+      {/* Process Section */}
       <section className="py-24 px-4 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto text-center space-y-16 relative z-10">
           <div className="space-y-4 max-w-2xl mx-auto">
@@ -163,10 +191,8 @@ const Home: React.FC = () => {
           </div>
           
           <div className="relative grid md:grid-cols-3 gap-12 px-4 md:px-12">
-              {/* Connecting Line */}
               <div className="hidden md:block absolute top-[3.5rem] left-[20%] right-[20%] h-[2px] bg-slate-100 -z-10" />
               
-              {/* Step 1 */}
               <div className="relative flex flex-col items-center group">
                   <div className="w-28 h-28 bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_50px_-12px_rgba(13,148,136,0.2)] transition-all duration-300 flex items-center justify-center mb-8 relative z-10 border border-slate-50/50">
                       <Calendar className="text-brand-teal w-10 h-10" strokeWidth={1.5} />
@@ -178,7 +204,6 @@ const Home: React.FC = () => {
                   </p>
               </div>
 
-              {/* Step 2 */}
               <div className="relative flex flex-col items-center group">
                   <div className="w-28 h-28 bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] transition-all duration-300 flex items-center justify-center mb-8 relative z-10 border border-slate-50/50">
                       <Users className="text-blue-500 w-10 h-10" strokeWidth={1.5} />
@@ -190,10 +215,9 @@ const Home: React.FC = () => {
                   </p>
               </div>
 
-              {/* Step 3 */}
               <div className="relative flex flex-col items-center group">
                   <div className="w-28 h-28 bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_50px_-12px_rgba(34,197,94,0.2)] transition-all duration-300 flex items-center justify-center mb-8 relative z-10 border border-slate-50/50">
-                      <CheckCircle2 className="text-green-500 w-10 h-10" strokeWidth={1.5} />
+                      <Award className="text-green-500 w-10 h-10" strokeWidth={1.5} />
                       <div className="absolute -top-2 -right-2 w-8 h-8 bg-brand-navy text-white rounded-full flex items-center justify-center font-bold text-sm border-4 border-white shadow-sm">3</div>
                   </div>
                   <h3 className="text-xl font-bold text-brand-navy mb-3">Get Certified</h3>
@@ -248,14 +272,11 @@ const Home: React.FC = () => {
 
       {/* 6. "Serious Training" Rebuild */}
       <section className="py-24 px-4 bg-brand-navy relative overflow-hidden">
-        {/* Decorative Grid */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-teal rounded-full blur-[150px] opacity-20" />
         
         <div className="max-w-7xl mx-auto relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-                
-                {/* Left: Content */}
                 <div className="space-y-8">
                     <div className="inline-block bg-white/10 backdrop-blur border border-white/20 px-4 py-2 rounded-full text-white font-bold text-sm tracking-widest uppercase">
                         Our Philosophy
@@ -267,37 +288,19 @@ const Home: React.FC = () => {
                     <p className="text-slate-300 text-xl leading-relaxed max-w-lg">
                         We believe learning to save a life shouldn't be boring or intimidating. Our approach is hands-on, supportive, and designed to make complex skills stick.
                     </p>
-                    
-                    <div className="grid grid-cols-2 gap-8 pt-8">
-                        <div>
-                            <div className="text-4xl font-extrabold text-white mb-2">15k+</div>
-                            <div className="text-slate-400 font-medium">Students Certified</div>
-                        </div>
-                        <div>
-                            <div className="text-4xl font-extrabold text-white mb-2">99%</div>
-                            <div className="text-slate-400 font-medium">Satisfaction Rate</div>
-                        </div>
-                    </div>
-
                     <div className="pt-4">
                         <Button className="!bg-brand-red !border-none hover:!bg-rose-600" size="lg">Meet the Team</Button>
                     </div>
                 </div>
 
-                {/* Right: Visual Composition */}
                 <div className="relative h-[600px] w-full">
-                    {/* Background Card */}
                     <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/10 transform rotate-3" />
-                    
-                    {/* Mascot Center Stage */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                          <div className="relative">
                             <div className="absolute inset-0 bg-brand-teal/30 blur-[60px] rounded-full" />
                             <Mascot className="w-64 h-64 md:w-80 md:h-80 drop-shadow-2xl animate-float" emotion="helpful" />
                          </div>
                     </div>
-
-                    {/* Floating UI Elements */}
                     <div className="absolute top-20 right-10 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 z-30 animate-float" style={{ animationDelay: '1s' }}>
                         <div className="bg-green-100 p-2 rounded-full text-green-600"><CheckCircle2 size={20}/></div>
                         <div>
@@ -305,7 +308,6 @@ const Home: React.FC = () => {
                             <div className="font-bold text-brand-navy">Qualified</div>
                         </div>
                     </div>
-
                     <div className="absolute bottom-32 left-10 bg-white p-4 rounded-2xl shadow-xl z-30 animate-float max-w-[200px]" style={{ animationDelay: '2s' }}>
                         <div className="flex gap-1 mb-2">
                              {[1,2,3,4,5].map(i => <Star key={i} size={12} className="text-yellow-400 fill-yellow-400" />)}
@@ -344,8 +346,8 @@ const Home: React.FC = () => {
          </div>
       </section>
 
-      {/* 9. Testimonials - Endless Reverse Marquee Loop */}
-      <section className="py-24 bg-slate-50 relative overflow-hidden">
+      {/* 9. Testimonials - Updated for True Infinite Loop & Pause on Hover */}
+      <section className="py-24 bg-slate-50 relative overflow-hidden group">
         <div className="max-w-7xl mx-auto space-y-12 px-4 mb-10">
           <div className="text-center">
              <h2 className="text-4xl font-bold text-brand-navy mb-4">Trusted by local heroes.</h2>
@@ -353,10 +355,29 @@ const Home: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex w-full overflow-hidden mask-gradient-wide">
-             <div className="flex animate-marquee-reverse gap-8 whitespace-nowrap py-8 pl-4">
-                 {marqueeTestimonials.map((testimonial, i) => (
+        <div className="flex overflow-hidden mask-gradient-wide">
+             {/* Set 1 */}
+             <div className="flex shrink-0 animate-marquee-reverse gap-8 whitespace-nowrap py-8 pl-4 group-hover:[animation-play-state:paused]">
+                 {TESTIMONIALS.concat(TESTIMONIALS).map((testimonial, i) => (
                      <div key={i} className="bg-white p-8 rounded-3xl shadow-soft flex flex-col hover:-translate-y-1 transition-transform duration-300 w-[400px] shrink-0 border border-slate-100 whitespace-normal">
+                        <div className="flex gap-1 mb-6">
+                            {[1,2,3,4,5].map(s => <Star key={s} size={18} className="text-yellow-400 fill-yellow-400" />)}
+                        </div>
+                        <p className="text-brand-navy font-medium text-lg italic mb-8 flex-grow">"{testimonial.text}"</p>
+                        <div className="flex items-center gap-4 pt-6 border-t border-slate-100">
+                            <img src={testimonial.avatar} className="w-12 h-12 rounded-full object-cover" alt={testimonial.name} />
+                            <div>
+                                <div className="font-bold text-brand-navy text-sm">{testimonial.name}</div>
+                                <div className="text-xs text-slate-400">{testimonial.company || testimonial.role}</div>
+                            </div>
+                        </div>
+                     </div>
+                 ))}
+             </div>
+             {/* Set 2 (Duplicate) */}
+             <div className="flex shrink-0 animate-marquee-reverse gap-8 whitespace-nowrap py-8 pl-4 group-hover:[animation-play-state:paused]" aria-hidden="true">
+                 {TESTIMONIALS.concat(TESTIMONIALS).map((testimonial, i) => (
+                     <div key={`dup-${i}`} className="bg-white p-8 rounded-3xl shadow-soft flex flex-col hover:-translate-y-1 transition-transform duration-300 w-[400px] shrink-0 border border-slate-100 whitespace-normal">
                         <div className="flex gap-1 mb-6">
                             {[1,2,3,4,5].map(s => <Star key={s} size={18} className="text-yellow-400 fill-yellow-400" />)}
                         </div>
@@ -374,7 +395,7 @@ const Home: React.FC = () => {
           </div>
       </section>
 
-      {/* 10. Final CTA - 2 Column Split Layout */}
+      {/* 10. Final CTA */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
             <div className="bg-brand-navy rounded-[3rem] overflow-hidden grid md:grid-cols-2 min-h-[500px]">
